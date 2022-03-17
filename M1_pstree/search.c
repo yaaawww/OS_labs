@@ -21,7 +21,7 @@ int search(char* path, int depth) {
 		if (strncmp (file->d_name, ".", 1) == 0)
 			continue;
 		if (file->d_type == 4) {
-				//for (int i = 0; i < depth; ++i) {
+			//for (int i = 0; i < depth; ++i) {
 				//printf("--");
 			//}
 			//printf("%s\n", file->d_name);
@@ -38,16 +38,14 @@ int search(char* path, int depth) {
 				char filename[50];
 				strcpy(filename, path);
 				strcat(filename, file->d_name);
+				//for (int i = 0; i < depth; ++i) {
+				//	printf("	");
+				//}
+				//printf("%s", get_value(filename, Pid));
 				for (int i = 0; i < depth; ++i) {
 					printf("	");
 				}
-				if (!get_value(filename, Pid))
-					return -1; 
-				for (int i = 0; i < depth; ++i) {
-					printf("	");
-				}
-				if (!get_value(filename, name))
-					return -1;
+				printf("%s", get_value(filename, name));
 			}
 		}
 	}

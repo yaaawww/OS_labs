@@ -1,28 +1,29 @@
 #include<stdio.h> 
 #include<string.h>
+#include<stdlib.h>
 
-int get_value(char* filename, char* key) {
+char* get_value(char* filename, char* key) {
 	char buf[1024];
 	FILE *fp = fopen(filename, "r");
+	int index = 0;
+	char* value = (char*)malloc(20);
+	char* temp;
 	if (fp) {
 		while (fgets(buf, sizeof(buf), fp) != NULL) {
-			char* value;
-			if ((value = strstr(buf, key)) == NULL) {
+			if ((temp = strstr(buf, key)) == NULL) {
 				continue;
 			} else {
-				while(*(value) != '\t') {
-					value++;
+				strcpy(value, temp);
+				while(*(value + index) != '\t') {
+					index++;
 				}
-				value++;
-				printf("%s", value);
-				fclose(fp);
-				return 1;
+				index++;
 			}
 		}
 	} else {
 		printf("Warning, there no such file.\n");
-		return 0;
+		return NULL;
 	}
 	fclose(fp);
-	return 1;
+	return value + index;
 }
