@@ -6,7 +6,7 @@ char* get_value(char* filename, char* key) {
 	char buf[1024];
 	FILE *fp = fopen(filename, "r");
 	int index = 0;
-	char* value = (char*)malloc(20);
+	static char value[1024];
 	char* temp;
 	if (fp) {
 		while (fgets(buf, sizeof(buf), fp) != NULL) {
@@ -18,6 +18,7 @@ char* get_value(char* filename, char* key) {
 					index++;
 				}
 				index++;
+				break;
 			}
 		}
 	} else {
@@ -25,5 +26,10 @@ char* get_value(char* filename, char* key) {
 		return NULL;
 	}
 	fclose(fp);
+	int re = 0;
+	while(*(value + index + re) != '\n') {
+		re++;
+	}
+	*(value + index + re) = '\0';
 	return value + index;
 }

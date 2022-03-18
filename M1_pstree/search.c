@@ -4,9 +4,11 @@
 #include<dirent.h>
 #include<sys/stat.h>
 
-int get_value(char* filename, char* key);
+char* get_value(char* filename, char* key);
 char* status = "status";
 char* Pid = "Pid";
+char* PPid = "PPid";
+char* Tgid = "Tgid";
 char* name = "Name";
 char filename[512][512];
 int len = 0;
@@ -38,14 +40,18 @@ int search(char* path, int depth) {
 				char filename[50];
 				strcpy(filename, path);
 				strcat(filename, file->d_name);
-				//for (int i = 0; i < depth; ++i) {
-				//	printf("	");
-				//}
-				//printf("%s", get_value(filename, Pid));
-				for (int i = 0; i < depth; ++i) {
-					printf("	");
-				}
-				printf("%s", get_value(filename, name));
+				//char* ptr_str = get_value(filename, Pid);
+				//printf("%s", ptr_str);
+				if(strcmp(get_value(filename, PPid), "1\n") == 0) {
+					if (depth > 1) {
+						printf("	");
+					}
+					for (int i = 0; i < depth; ++i) {
+						printf("----");
+					}
+					printf("%s", get_value(filename, name));
+					printf("(%s)", get_value(filename, Pid));
+				}				
 			}
 		}
 	}
