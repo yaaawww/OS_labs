@@ -42,15 +42,13 @@ int search(char* path, int depth) {
 				strcat(filename, file->d_name);
 				//char* ptr_str = get_value(filename, Pid);
 				//printf("%s", ptr_str);
-				if(strcmp(get_value(filename, PPid), "1\n") == 0) {
-					if (depth > 1) {
-						printf("	");
+				if(strcmp(get_value(filename, PPid), "1") == 0) {
+					for (int i = 0; i < depth - 1; ++i) {
+						printf("\t");
 					}
-					for (int i = 0; i < depth; ++i) {
-						printf("----");
-					}
+					printf("----");
 					printf("%s", get_value(filename, name));
-					printf("(%s)", get_value(filename, Pid));
+					printf("(%s)\n", get_value(filename, Pid));
 				}				
 			}
 		}

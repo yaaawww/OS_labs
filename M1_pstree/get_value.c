@@ -29,6 +29,9 @@ char* get_value(char* filename, char* key) {
 	int re = 0;
 	while(*(value + index + re) != '\n') {
 		re++;
+		if (*(value + index + re) == '\0') {
+			break;
+		}
 	}
 	*(value + index + re) = '\0';
 	return value + index;
