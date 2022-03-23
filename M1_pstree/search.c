@@ -46,7 +46,7 @@ int search(char* path, int depth) {
 					for (int i = 0; i < depth - 1; ++i) {
 						printf("\t");
 					}
-					printf("----");
+					printf("--");
 					printf("%s", get_value(filename, name));
 					printf("(%s)\n", get_value(filename, Pid));
 				}				
