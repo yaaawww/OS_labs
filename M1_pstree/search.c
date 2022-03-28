@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 #include<sys/types.h>
 #include<dirent.h>
 #include<sys/stat.h>
@@ -42,14 +43,21 @@ int search(char* path, int depth) {
 				strcat(filename, file->d_name);
 				//char* ptr_str = get_value(filename, Pid);
 				//printf("%s", ptr_str);
-				if(strcmp(get_value(filename, PPid), "1") == 0) {
+				char* _PPid = get_value(filename, PPid);
+				char* _Name = get_value(filename, name);
+				char* _Pid = get_value(filename, Pid);
+				if(strcmp(_PPid, "1") == 0) {
 					for (int i = 0; i < depth - 1; ++i) {
 						printf("\t");
 					}
 					printf("--");
-					printf("%s", get_value(filename, name));
-					printf("(%s)\n", get_value(filename, Pid));
+					printf("%s",_Name);
+					printf("(%s)\n", _Pid);
 				}				
+				printf("%s\n", _Name);
+				free(_PPid);
+				free(_Name);
+				free(_Pid);
 			}
 		}
 	}
