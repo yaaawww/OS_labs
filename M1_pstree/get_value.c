@@ -7,6 +7,7 @@ char* get_value(char* filename, char* key) {
 	FILE *fp = fopen(filename, "r");
 	int index = 0;
 	static char value[1024];
+	char* value = (char*) malloc(sizeof(char)*1024);
 	char* temp;
 	if (fp) {
 		while (fgets(buf, sizeof(buf), fp) != NULL) {
