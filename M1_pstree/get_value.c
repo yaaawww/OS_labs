@@ -34,5 +34,6 @@ char* get_value(char* filename, char* key) {
 		}
 	}
 	*(value + index + re) = '\0';
+	strcpy(value, value + index);
 	return value;
 }

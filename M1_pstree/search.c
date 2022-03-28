@@ -54,7 +54,6 @@ int search(char* path, int depth) {
 					printf("%s",_Name);
 					printf("(%s)\n", _Pid);
 				}				
-				printf("%s\n", _Name);
 				free(_PPid);
 				free(_Name);
 				free(_Pid);
