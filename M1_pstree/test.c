@@ -1,7 +1,7 @@
 #include<stdio.h>
 int search(char* path, int depth);
 
-int main (int argc, int *argv[]) {
+int main () {
 	search("/proc/", 0);
 	return 0;
 }
