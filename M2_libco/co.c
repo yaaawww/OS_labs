@@ -31,11 +31,11 @@ static int index = 0;
 static int round = 0;
 static jmp_buf main_context;
 
-static inline void stack_switch_call(void *sp, void *entry, uintptr_t arg) {
+static inline void stack_switch_call(void *sp, uintptr_t *ret, void *entry, uintptr_t arg) {
 	__asm__ volatile (
 #if __x86_64__
-	    "movq %0, %%rsp; movq %2, %%rdi; jmp *%1"
-		: 
+	    "movq 8(%%rbp), %0; movq %1, %%rsp; movq %3, %%rdi; jmp *%2"
+		: "=b" (*ret)
 		: "b"((uintptr_t)sp), "d"(entry), "a"(arg) 
 		: "memory"
 #else
@@ -61,21 +61,26 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
 }
 
 void co_wait(struct co *co) {
+	 setjmp(main_context);
 	 if (co->status != CO_DEAD) {
-		 setjmp(main_context);
 		 current = pool[round];
 		 co_yield();
 	 } else {
-		 
+		 return;
 	 }
 }
 
 void co_yield() {
 	int val = setjmp(current->context);
 	if (val == 0) {
+		/*set the status*/
 		current = pool[(round++) % 2];
 		if (current->status == CO_NEW) {
-			stack_switch_call(&current->stack[8191], current->func, (uintptr_t)current->arg);
+			current->status = CO_RUNNING;
+			uintptr_t* ret = (uintptr_t*)(&current->stack[8184]);
+			stack_switch_call(&current->stack[8100], ret, current->func, (uintptr_t)current->arg);
+			/*the return place*/
+			longjmp(main_context, 1);
 		} else {
 			longjmp(current->context, 1);
 		}
@@ -85,15 +90,15 @@ void co_yield() {
 }
 
 void entry(void *arg) {
-  while (1) {
     printf("%s", (const char *)arg);
     co_yield();
-  }
+	current->status = CO_DEAD;
+	longjmp(main_context, 1);
 }
 
 int main() {
 	struct co *co1 = co_start("co1", entry, "a");
 	struct co *co2 = co_start("co2", entry, "b");
 	co_wait(co1);
-	co_wait(co2);
+//	co_wait(co2);
 }
